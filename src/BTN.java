@@ -8,13 +8,13 @@ public class BTN<T extends Comparable<Object>> {
 	protected int balance; //negativo si cargado por la izquierda, positivo si cargado por la derecha
 	
 	//Constructora
-	public BTN(T pInfo) {
+	protected BTN(T pInfo) {
 		info=pInfo;
 		balance=0;
 	}
 	
 	//Otros metodos
-	public void insertar(T pInfo) {
+/*	public void insertar(T pInfo) {
 		BTN<T> nodo=new BTN<T>(pInfo);
 		if (pInfo.compareTo(this.info)<0) {	//Si la info a insertar es menor que la del nodo actual
 			if (left!=null) {				//Si hay un nodo hijo a la izquierda
@@ -35,8 +35,9 @@ public class BTN<T extends Comparable<Object>> {
 			balance++;
 		}
 	}
+ */
 	
-	public void corregirEquilibrio() {
+	protected void corregirEquilibrio() {
 		if (balance<-1) {
 			rotar("der");
 			balance++;
@@ -48,7 +49,7 @@ public class BTN<T extends Comparable<Object>> {
 	}
 	
 	private void rotar(String pDir) { //Algoritmo para mantener el arbol equilibrado
-		if (pDir=="izq") {
+		if (pDir.equals("izq")) {
 			if (father!=null) {
 				BTN<T> padre=father;
 				if (father.father!=null) {
@@ -74,7 +75,7 @@ public class BTN<T extends Comparable<Object>> {
 		}
 	}
 	
-	public BTN<T> maximoPorIzquierda() {
+	private BTN<T> maximoPorIzquierda() {
 		BTN<T> act=this.left;
 		while (act.right!=null) {
 			act=act.right;
@@ -82,7 +83,7 @@ public class BTN<T extends Comparable<Object>> {
 		return act;
 	}
 	
-	public BTN<T> minimoPorDerecha() {
+	private BTN<T> minimoPorDerecha() {
 		BTN<T> act=this.right;
 		while (act.left!=null) {
 			act=act.left;

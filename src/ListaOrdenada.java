@@ -11,16 +11,49 @@ public class ListaOrdenada<T extends Comparable<Object>> {
 	
 	//Otros metodos
 	
-	public void insertar(T pInfo) { //Inserta de manera ordenada llamando al metodo recursivo inertar de la clase BTN<T>
+//	public void insertar(T pInfo) { //Inserta de manera ordenada llamando al metodo recursivo inertar de la clase BTN<T>
+//		if (root!=null) {
+//			root.insertar(pInfo);
+//		}
+//		else {
+//			root = new BTN<T>(pInfo);
+//		}
+//		this.length++;
+//	}
+
+	public void insertar(T pInfo) {
 		if (root!=null) {
-			root.insertar(pInfo);
+			this.insertar(pInfo, root);
 		}
-		else {
-			root = new BTN<T>(pInfo);
+		else{
+			this.root=new BTN<T>(pInfo);
 		}
-		this.length++;
 	}
-	
+
+	private void insertar(T pInfo, BTN<T> pNodo) {
+		if (pInfo.compareTo(pNodo.info)<0){
+			if (pNodo.left!=null){
+				this.insertar(pInfo, pNodo.left);
+				pNodo.balance--;
+				pNodo.corregirEquilibrio();
+			}
+			else{
+				pNodo.left=new BTN<T>(pInfo);
+				pNodo.balance--;
+			}
+		}
+		else{
+			if (pNodo.right!=null){
+				this.insertar(pInfo, pNodo.right);
+				pNodo.balance++;
+				pNodo.corregirEquilibrio();
+			}
+			else{
+				pNodo.right=new BTN<T>(pInfo);
+				pNodo.balance++;
+			}
+		}
+	}
 	
 //	public void insertar(T pInfo) {
 //		T info= pInfo;
@@ -30,18 +63,18 @@ public class ListaOrdenada<T extends Comparable<Object>> {
 //		}
 //		else if (pInfo.compareTo(nodo.info)<0) {
 //			if (root.balance>-1) {
-//		
+//
 //			}
 //			else {
-//		
+//
 //			}
 //		}
 //		else {
 //			if (root.balance<1) {
-//		
+//
 //			}
 //			else {
-//		
+//
 //			}
 //
 //		}
@@ -58,12 +91,15 @@ public class ListaOrdenada<T extends Comparable<Object>> {
 
 		if (pNodo.left==null) { //Si no hay valores mas a la 'izquierda' es el valor minimo o 'del principio'
 			
-			if (pNodo!=root) { //Caso especial si el valor minimo es root
+			if (pNodo!=root) { //Caso final normal
+				BTN<T> padre=pNodo.father;
 				pNodo.father.left=pNodo.right;
-				pNodo.right.father=pNodo.father;
+				if (pNodo.right!=null) { //Para evitar nullPointerException
+					pNodo.right.father = pNodo.father;
+				}
 			}
 			
-			else { //Caso final normal
+			else { //Caso especial si el valor minimo es root
 				root=pNodo.right;
 				if (pNodo.right!=null) {
 					pNodo.right.father=null;
@@ -86,14 +122,18 @@ public class ListaOrdenada<T extends Comparable<Object>> {
 	}
 	
 	private void quitarDelFinal(BTN<T> pNodo) { //Usa recursividad por inmersion para encontrar el nodo con el valor maximo y retirarlo
-		
 		if (pNodo.right==null) { //Si no hay valores mas a la 'derecha' es el valor maximo o 'del final'
 			
-			if (pNodo!=root) { //Caso especial si el valor maximo es root
+			if (pNodo!=root) { //Caso final normal
+				BTN<T> padre=pNodo.father;
 				pNodo.father.right=pNodo.left;
-				pNodo.left.father=pNodo.father;
+				if (pNodo.left!=null) { //Para evitar nullPointerException
+					pNodo.left.father = pNodo.father;
+				}
+				padre.balance--;
+				padre.corregirEquilibrio(); //Reequilibra el arbol
 			}
-			else { //Caso final normal
+			else { //Caso especial si el valor maximo es root
 				this.root=pNodo.left;
 				if (pNodo.left!=null) {
 					pNodo.left.father=null;
@@ -129,6 +169,13 @@ public class ListaOrdenada<T extends Comparable<Object>> {
 	}
 	
 	private T encontrar(T pInfo, BTN<T> pNodo) {
-		
+		//TODO
+		return pInfo;
 	}
+
+	public int getPosInsercion(T pInfo){
+		//TODO
+		return(-1);
+	}
+
 }
